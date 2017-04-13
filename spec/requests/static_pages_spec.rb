@@ -1,15 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe "StaticPages", type: :request do
-  let(:add_text) {'my site page: '}
+  let(:add_text) {'My training site - '}
   describe "home page" do
       it "should have content 'Sample App'" do
         visit "/static_pages/home"
         expect(page).to have_content('Sample App')
       end
-      it 'should have title Home' do
+      it 'should have base title Home' do
         visit 'static_pages/home'
-        expect(page).to have_title("#{add_text} Home")
+        expect(page).to have_title("#{add_text}")
+      end
+
+      it 'should not have custom title Home' do
+        visit 'static_pages/home'
+        expect(page).not_to have_title("Home")
       end
   end
 
