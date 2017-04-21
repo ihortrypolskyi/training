@@ -10,6 +10,7 @@ RSpec.describe User, type: :model do
   it {should respond_to(:password)}
   it {should respond_to(:password_confirmation)}
   it {should be_valid}
+  it {should respond_to(:authenticate)}
 
  describe 'if name is not present' do
    before {@user.name=''}
@@ -28,7 +29,8 @@ RSpec.describe User, type: :model do
 
   describe 'if email format is not valid' do
     it 'should not be valid' do
-      wrong_email = %W[user@foo,com user_at_foo.org example.user@foo.foo@bar_baz.com foo@bar+baz.com]
+      wrong_email = %W[user@foo,com user_at_foo.org
+example.user@foo.foo@bar_baz.com foo@bar+baz.com foo@baz..com]
       wrong_email.each do |x|
         @user.email = x
         expect(@user).not_to be_valid
@@ -69,6 +71,32 @@ RSpec.describe User, type: :model do
     it {should_not be_valid}
   end
 
+  describe 'when password is too short' do
+    before {@user.password = @user.password_confirmation = 'a' * 5}
+    it {should_not be_valid}
+  end
 
+  describe 'return value of authenticate method' do
+    before {@user.save}
+    let(:found_user) {User.find_by(email: @user.email)}
 
+    describe 'with valid password' do
+      it {should eq found_user.authenticate(@user.password)}
+    end
+
+    describe 'with invalid password' do
+      let(:invalid_pass_user) {found_user.authenticate('invalid')}
+      it {should_not eq invalid_pass_user}
+      it { expect(invalid_pass_user).to be false }
+    end
+
+    describe 'email in mixed casees' do
+      let(:mixed_case_email) {'EXamPle@GmAIl.coM'}
+      it 'should be saved downcase' do
+        @user.email = mixed_case_email
+        @user.save
+        expect(@user.reload.email).to eq mixed_case_email.downcase
+      end
+    end
+  end
 end
