@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
   describe 'if email format is not valid' do
     it 'should not be valid' do
       wrong_email = %W[user@foo,com user_at_foo.org
-example.user@foo.foo@bar_baz.com foo@bar+baz.com foo@baz..com]
+example.user@foo.foo@bar_baz.com foo@bar+baz.com foo@baz..com ]
       wrong_email.each do |x|
         @user.email = x
         expect(@user).not_to be_valid
