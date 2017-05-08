@@ -7,5 +7,11 @@
         <%= @user.name %>
       </h1>
     </section>
+    <%= form_for @user do |f| %>
+        <%= f.text_field :name %>
+        <%= f.text_area :email, size: "60x12" %>
+        <%= f.submit "Create" %>
+    <% end %>
+
   </aside>
 </div>
