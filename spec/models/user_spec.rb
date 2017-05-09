@@ -127,6 +127,7 @@ example.user@foo.foo@bar_baz.com foo@bar+baz.com foo@baz..com ]
    end
 
    describe "with valid information" do
+     pending
      before do
        fill_in "Name",         with: "Example User"
        fill_in "Email",        with: "user@example.com"
@@ -134,8 +135,10 @@ example.user@foo.foo@bar_baz.com foo@bar+baz.com foo@baz..com ]
        fill_in "Confirmation", with: "foobar"
      end
 
-     it "should create a user" do
-       expect { click_button submit }.to change(User, :count).by(1)
+     pending do
+       it "should create a user" do
+         expect { click_button submit }.to change(User, :count).by(1)
+       end
      end
 
      # describe "after saving the user" do
